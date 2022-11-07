@@ -5,10 +5,7 @@ import com.web.services.ProductServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +36,31 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }else {
             return ResponseEntity.of(Optional.of(productList));
+        }
+    }
+
+    //delete product handler
+    @RequestMapping(value = "/product/delete/{productId}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public ResponseEntity<Void> deleteProduct(@PathVariable("productId") Integer productId) {
+        try{
+            this.productServices.deleteSingleProduct(productId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    //update book handler
+    @PutMapping("/product/update/{productId}")
+    public ResponseEntity<Product> updateProduct(@RequestBody Product product, @PathVariable("productId") Integer productId) {
+        try{
+            this.productServices.updateProduct(product, productId);
+            return ResponseEntity.ok().body(product);
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }

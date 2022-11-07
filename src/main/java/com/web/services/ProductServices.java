@@ -22,4 +22,15 @@ public class ProductServices {
     public List<Product> getAllProduct(){
         return this.productRepo.findAll();
     }
+
+    //delete single student
+    public void deleteSingleProduct(Integer productId) {
+        productRepo.deleteById(productId);
+    }
+
+
+    public void updateProduct(Product product, Integer productId) {
+        product.setProductId(productId);
+        productRepo.save(product);
+    }
 }
